@@ -39,7 +39,6 @@ public class QuestionController {
 
     @GetMapping("/category")
     public ResponseEntity<List<QuestionWrapper>> getQuestionsByCategory(@RequestParam ("category") String category){
-        System.out.println("heyy");
         return questionService.getQuestionsByCategory(category);
     }
 
@@ -48,7 +47,7 @@ public class QuestionController {
         return questionService.getQuestions(questionIDs);
     }
 
-    @GetMapping("/getScore")
+    @PostMapping("/getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses){
        return  questionService.getScore(responses);
     }

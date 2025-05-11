@@ -1,0 +1,105 @@
+<div class="card">
+    <div class="card-header bg-primary text-white">
+      <h2>Add New Question</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+      </div>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ errorMessage }}
+        <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+      </div>
+      
+      <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="questionText" class="form-label">Question Text</label>
+          <textarea 
+            id="questionText" 
+            formControlName="questionText" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': questionForm.get('questionText')?.invalid && questionForm.get('questionText')?.touched}"
+            rows="3"
+          ></textarea>
+          <div *ngIf="questionForm.get('questionText')?.invalid && questionForm.get('questionText')?.touched" class="invalid-feedback">
+            <div *ngIf="questionForm.get('questionText')?.errors?.['required']">Question text is required.</div>
+            <div *ngIf="questionForm.get('questionText')?.errors?.['minlength']">Question text must be at least 5 characters.</div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <input 
+            type="text" 
+            id="category" 
+            formControlName="category" 
+            class="form-control"
+            [ngClass]="{'is-invalid': questionForm.get('category')?.invalid && questionForm.get('category')?.touched}"
+          >
+          <div *ngIf="questionForm.get('category')?.invalid && questionForm.get('category')?.touched" class="invalid-feedback">
+            Category is required.
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Options</label>
+          <div formArrayName="options">
+            <div class="input-group mb-2" *ngFor="let option of options.controls; let i = index">
+              <span class="input-group-text">{{ i + 1 }}</span>
+              <input 
+                type="text" 
+                [formControlName]="i" 
+                class="form-control"
+                [ngClass]="{'is-invalid': option.invalid && option.touched}"
+              >
+              <button 
+                type="button" 
+                class="btn btn-outline-danger" 
+                (click)="removeOption(i)" 
+                [disabled]="options.length <= 2"
+              >
+                Remove
+              </button>
+              <div *ngIf="option.invalid && option.touched" class="invalid-feedback">
+                Option text is required.
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary" (click)="addOption()">
+            Add Option
+          </button>
+        </div>
+        
+        <div class="mb-3">
+          <label for="correctAnswer" class="form-label">Correct Answer</label>
+          <select 
+            id="correctAnswer" 
+            formControlName="correctAnswer" 
+            class="form-select"
+            [ngClass]="{'is-invalid': questionForm.get('correctAnswer')?.invalid && questionForm.get('correctAnswer')?.touched}"
+          >
+            <option value="" disabled>Select the correct answer</option>
+            <option *ngFor="let option of options.value; let i = index" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+          <div *ngIf="questionForm.get('correctAnswer')?.invalid && questionForm.get('correctAnswer')?.touched" class="invalid-feedback">
+            Please select the correct answer.
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="isSubmitting"
+          >
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Submit Question
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

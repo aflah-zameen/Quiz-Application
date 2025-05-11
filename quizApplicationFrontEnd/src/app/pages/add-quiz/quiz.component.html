@@ -1,0 +1,50 @@
+<div class="container mt-5">
+  <div class="card shadow rounded p-4 mx-auto" style="max-width: 500px;">
+    <h3 class="mb-4 text-center">Create New Quiz</h3>
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Quiz Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="name"
+          placeholder="Enter quiz name"
+        />
+        <div class="text-danger mt-1" *ngIf="quizForm.get('name')?.invalid && quizForm.get('name')?.touched">
+          Quiz name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Quiz Category</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="category"
+          placeholder="Enter quiz category"
+        />
+        <div class="text-danger mt-1" *ngIf="quizForm.get('category')?.invalid && quizForm.get('category')?.touched">
+          Category is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Number of Questions</label>
+        <input
+          type="number"
+          class="form-control"
+          formControlName="numberOfQuestions"
+          placeholder="e.g. 10"
+          min="1"
+        />
+        <div class="text-danger mt-1" *ngIf="quizForm.get('numberOfQuestions')?.invalid && quizForm.get('numberOfQuestions')?.touched">
+          Please enter a valid number.
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-100" type="submit" [disabled]="quizForm.invalid">
+        Create Quiz
+      </button>
+    </form>
+  </div>
+</div>
